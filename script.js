@@ -1,41 +1,41 @@
-// Script is one big method >>>
+// Script consists of one large method >>>
 
 planck.testbed("Galton Board", (testbed) => {
-  // __ VARS BLOCK __
+  // __ VARIABLES BLOCK __
 
-  const BALL_SIZE = 0.15, // ball size
-    NAIL_SIZE = BALL_SIZE * 4, // circle size
-    LANE_SIZE = BALL_SIZE * 6, // lane width
-    LANE_NUM = 25, // how many lanes
-    SIZE = LANE_SIZE * LANE_NUM * 2, // board size
-    LANE_MARGIN = 1.75, // gap between lanes
-    BALL_NUM = 1000, // how many balls
-    xPos = (x, y) => {
-      return (x * 2 - Math.abs(y)) * LANE_SIZE;
-    }, // X position
-    yPos = (y) => {
-      return SIZE - y * LANE_SIZE * LANE_MARGIN;
-    }, // Y position
-    LANE_TOP_YPOS = yPos(LANE_NUM), // top coordinates for lanes
-    LANE_LENGTH = SIZE / 1.6 + LANE_TOP_YPOS; // lane length
+  const BALL_SIZE = 0.105; // Scaling factor for ball size
+  const NAIL_SIZE = BALL_SIZE * 4; // Size of the circular nails
+  const LANE_SIZE = BALL_SIZE * 6; // Width of each lane
+  const LANE_NUM = 25; // Number of lanes
+  const SIZE = LANE_SIZE * LANE_NUM * 2; // Size of the board
+  const LANE_MARGIN = 1.75; // Gap between lanes
+  const BALL_NUM = 1000; // Number of balls
+  const xPos = (x, y) => {
+    return (x * 2 - Math.abs(y)) * LANE_SIZE;
+  }; // Calculate X position
+  const yPos = (y) => {
+    return SIZE - y * LANE_SIZE * LANE_MARGIN;
+  }; // Calculate Y position
+  const LANE_TOP_YPOS = yPos(LANE_NUM); // Top coordinates for lanes
+  const LANE_LENGTH = SIZE / 1.6 + LANE_TOP_YPOS; // Length of each lane
 
   // __ CORE BLOCK __
 
-  // add core
+  // Adding core
   const pl = planck;
   const Vec2 = pl.Vec2;
-  // create new world and adding gravity
+  // Create a new world and set gravity
   const world = pl.World({
     gravity: Vec2(0, -70),
   });
-  // create a board
+  // Create a board
   const board = world.createBody();
-  // colors
-  board.render = { fill: "#1e5f74", stroke: "#1e5f74" };
+  // Colors
+  board.render = { fill: "#2F3640", stroke: "#2F3640" };
 
-  // __ DRAW A BOARD __
+  // __ DRAW THE BOARD __
 
-  // left
+  // Left side
   board.createFixture(
     pl.Chain([
       Vec2(xPos(0, LANE_NUM) - NAIL_SIZE, yPos(-3)),
@@ -57,7 +57,7 @@ planck.testbed("Galton Board", (testbed) => {
       Vec2(xPos(0, LANE_NUM) - NAIL_SIZE, LANE_TOP_YPOS),
     ])
   );
-  // right
+  // Right side
   board.createFixture(
     pl.Chain([
       Vec2(xPos(LANE_NUM, LANE_NUM) + NAIL_SIZE, yPos(-3)),
@@ -79,7 +79,7 @@ planck.testbed("Galton Board", (testbed) => {
       Vec2(xPos(LANE_NUM, LANE_NUM) + NAIL_SIZE, LANE_TOP_YPOS),
     ])
   );
-  // draw lanes
+  // Draw lanes
   for (let x = 1; x < LANE_NUM; x++) {
     board.createFixture(
       pl.Chain([
@@ -90,85 +90,84 @@ planck.testbed("Galton Board", (testbed) => {
       ])
     );
   }
-  // draw columns
+  // Draw columns
   for (let y = 1; y <= LANE_NUM; y++) {
-    // chequerwise
+    // Checkerboard pattern
     for (let x = 0; x <= Math.abs(y); x++) {
-      //
       board.createFixture(pl.Circle(Vec2(xPos(x, y), yPos(y)), NAIL_SIZE));
     }
   }
 
   // __ BALLS __
 
-  // timer
+  // Timer
   let dropBallsId = 0;
-  // balls array
+  // Balls array
   let balls = [];
-  // function to drop balls
+  // Function to drop balls
   const dropBall = () => {
-    // creat ball
+    // Create a ball
     const ball = world.createDynamicBody({
-      // random position
+      // Random position
       position: Vec2(xPos(2, -2) * 2 * Math.random() - xPos(2, -2), yPos(-2)),
     });
-    // draw a ball
-    ball.render = { fill: "#fcdab7", stroke: "#1e5f74" };
-    // ball params
+    // Set ball appearance
+    ball.render = { fill: "#F375F3", stroke: "#F375F3" };
+    // Ball parameters
     ball.createFixture(pl.Circle(BALL_SIZE), {
       density: 1000.0,
       friction: 10,
       restitution: 0.3,
     });
-    // add ball
+    // Add the ball
     balls.push(ball);
   };
 
-  // balls in turn
+  // Drop balls one by one
   const dropBalls = (ballNum) => {
-    // interval
+    // Interval
     dropBallsId = setInterval(() => {
-      // drop
+      // Drop a ball
       dropBall();
-      // count down
+      // Decrease ball count
       ballNum--;
-      // stop when no balls
+      // Stop when no more balls to drop
       if (ballNum <= 0) {
         clearInterval(dropBallsId);
       }
     }, 200);
   };
-  // drop balls
+  // Start dropping balls
   dropBalls(BALL_NUM);
 
-  // __ CONTRALS __
+  // __ CONTROLS __
 
-  // kill balls
+  // Clear all balls
   const clearBalls = () => {
     balls.forEach((ball) => {
-      // cleare from balls
+      // Remove the ball from the world
       world.destroyBody(ball);
     });
-    // cleare the balls array
+    // Clear the balls array
     balls = [];
-    // stop dropping
+    // Stop dropping balls
     clearInterval(dropBallsId);
   };
 
-  // add keys touching
+  // Add keyboard controls
   testbed.keydown = (code, char) => {
-    // looking what has been presed
+    // Check which key was pressed
     switch (char) {
-      // restart
+      // Restart with new balls
       case "X":
         clearBalls();
         dropBalls(BALL_NUM);
         break;
-      // one ball
+      // Drop a single ball
       case "D":
         dropBall();
         break;
-      // cleare
+      // Clear all balls
       case "C":
         clearBalls();
         break;
