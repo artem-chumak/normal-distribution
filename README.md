@@ -10,6 +10,9 @@ Web imitation of **Normal Distribution**, how it looks in real life.
 
 - The project without CSS. Only HTML `<canvas>` and JS are used.
 - planck-js are used
+- press button `C` to cleare
+- press button `D` to drop one ball
+- press button `X` to restart
 
 ### Improvements (to do)
 - nothing
