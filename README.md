@@ -2,7 +2,7 @@
 
 # <p align="center">Normal Distribution</p>
 
-## <p align="center"><a href="https://artem-chumak.github.io/magic-8-ball/" target="_blank">artem-chumak.github.io/magic-8-ball</a></p>
+## <p align="center"><a href="https://artem-chumak.github.io/normal-distribution/" target="_blank">artem-chumak.github.io/normal-distribution</a></p>
 
 Web imitation of **Normal Distribution**, how it looks in real life.
 
