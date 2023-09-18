@@ -1,4 +1,5 @@
 <p align="center"><img src="https://img.icons8.com/officel/80/normal-distribution-histogram.png"/></p>
+
 # <p align="center">Normal Distribution</p>
 
 ## <p align="center"><a href="https://artem-chumak.github.io/magic-8-ball/" target="_blank">artem-chumak.github.io/magic-8-ball</a></p>
